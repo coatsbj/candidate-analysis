@@ -1,3 +1,5 @@
+import NlpAnalyzerBase from './analysis-tools/NlpAnalyzerBase';
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 if (typeof(Array.isEmpty) !== 'function') {
@@ -65,7 +67,6 @@ if (typeof(Array.prototype.flatMap) !== 'function') {
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const childProcess = require('child_process');
 const PORT = 8080;
 
 let apiApp;
@@ -76,7 +77,24 @@ apiApp.use(bodyParser.json());
 
 apiApp.post('/process-application', (req, res) => {
     // You'll create your note here.
-    res.status(500).send('STILL not implemented');
+    const request = req.body;
+
+    try {
+        const textAnalyzer = new NlpAnalyzerBase();
+        const textLines = Object.entries(request).map(e => e[1].toString());
+        const text = textLines.join('\n');
+        textAnalyzer.analyze(text);
+
+        const retVal = {
+            terms: textAnalyzer.wordFrequencies,
+            sentences: textAnalyzer.sentences.data()
+        };
+
+        res.json(retVal);
+    }
+    catch (err) {
+        res.status(500).send(err.toString());
+    }
 });
 
 apiAppServer = apiApp.listen(PORT, () => {
