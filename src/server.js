@@ -76,7 +76,7 @@ apiApp.use(bodyParser.json());
 
 apiApp.post('/process-application', (req, res) => {
     // You'll create your note here.
-    res.status(500).send('not implemented');
+    res.status(500).send('STILL not implemented');
 });
 
 apiAppServer = apiApp.listen(PORT, () => {
