@@ -1,3 +1,7 @@
+import NlpAnalyzerBase from './analysis-tools/NlpAnalyzerBase';
+import jwt from 'node-jwt';
+import registerRoutes from '../../analyzer/src/api-endpoints';
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 if (typeof(Array.isEmpty) !== 'function') {
@@ -65,20 +69,41 @@ if (typeof(Array.prototype.flatMap) !== 'function') {
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const childProcess = require('child_process');
 const PORT = 8080;
 
-let apiApp;
-let apiAppServer;
+let webApp;
+let webappServer;
 
-apiApp = express();
-apiApp.use(bodyParser.json());
+webApp = express();
 
-apiApp.post('/process-application', (req, res) => {
-    // You'll create your note here.
-    res.status(500).send('STILL not implemented - PR test');
-});
+webApp.use('/*.*', express.static(path.join(__dirname, 'public')));
 
-apiAppServer = apiApp.listen(PORT, () => {
+webApp.use(bodyParser.json());
+
+// webApp.post('/api/process-application', (req, res) => {
+//     // You'll create your note here.
+//     const request = req.body;
+//
+//     try {
+//         const textAnalyzer = new NlpAnalyzerBase();
+//         const textLines = Object.entries(request).map(e => e[1].toString());
+//         const text = textLines.join('\n');
+//         textAnalyzer.analyze(text);
+//
+//         const retVal = {
+//             terms: textAnalyzer.wordFrequencies,
+//             sentences: textAnalyzer.sentences.data()
+//         };
+//
+//         res.json(retVal);
+//     }
+//     catch (err) {
+//         res.status(500).send(err.toString());
+//     }
+// });
+
+registerRoutes(webApp, 'api');
+
+webappServer = webApp.listen(PORT, () => {
     console.log('API is live on ' + PORT);
 });
