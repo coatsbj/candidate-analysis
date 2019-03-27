@@ -5,8 +5,8 @@ import ModelBase from '../models/ModelBase';
  * Registers the /subject endpoint for persisting entities
  * @param app
  */
-export default (app) => {
-    app.post('/subject', (req, res) => {
+export default (app, routePrefix = '') => {
+    app.post(`${routePrefix}/subject`, (req, res) => {
         const subjectModel = req.body;
         if (!subjectModel) {
             res.status(400).send('Request must contain subject entity to persist');
@@ -40,7 +40,7 @@ export default (app) => {
     /**
      * Update existing subject entity...probably should support a PATCH
      */
-    app.put('/subject', (req, res) => {
+    app.put(`${routePrefix}/subject`, (req, res) => {
         const subjectModel = req.body;
         if (!subjectModel) {
             res.status(400).send('Request must contain subject entity to persist');
@@ -71,7 +71,7 @@ export default (app) => {
         }
     });
 
-    app.delete('/subject/:id', (req, res) => {
+    app.delete(`${routePrefix}/subject/:id`, (req, res) => {
         const subjectModel = req.body;
 
         const subjectId = req.params.id;

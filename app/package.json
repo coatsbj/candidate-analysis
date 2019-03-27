@@ -32,6 +32,7 @@
     "mongodb": "^3.0.7",
     "nlp-ngram": "0.0.3",
     "node-fetch": "^2.1.2",
+    "node-jwt": "0.0.1",
     "readline": "^1.3.0",
     "table": "^5.0.2"
   },
